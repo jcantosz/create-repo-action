@@ -3,16 +3,16 @@ description: "Creates repo either empty or from a template. Can authorize with a
 inputs:
   # Auth params
   pat:
-    description: "The PAT used to authenticate. Required if creating from a repo template."
+    description: "The PAT used to authenticate. Required if creating from a repo template unless using 'clone_push'."
     required: false
   app_id:
-    description: "The GitHub App ID used to authenticate. Can only be used to create an empty repo."
+    description: "The GitHub App ID used to authenticate. Can only be used to create an empty repo unless using 'clone_push'."
     required: false
   app_private_key:
-    description: "The GitHub App private key used to authenticate. Can only be used to create an empty repo."
+    description: "The GitHub App private key used to authenticate. Can only be used to create an empty repo unless using 'clone_push'."
     required: false
   app_installation_id:
-    description: "The GitHub App installation id used to authenticate. Can only be used to create an empty repo."
+    description: "The GitHub App installation id used to authenticate. Can only be used to create an empty repo unless using 'clone_push'."
     required: false
   api_url:
     description: "GitHub API url. Change this if using GitHub Enterprise Server."
@@ -46,7 +46,10 @@ inputs:
     description: "Whether to include all branches or not, if creating from template"
     required: false
     default: "true"
-
+  clone_push:
+    description: "Simulates 'create from a template' using GitHub App authentication by running git clone/push instead of using the API. Will retain all commit history. Will not show linkage in UI."
+    required: false
+    default: "false"
 runs:
   using: "node20"
   main: "dist/index.js"

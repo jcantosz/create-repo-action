@@ -1,12 +1,14 @@
+const Auth = require("./src/auth.js");
 const core = require("@actions/core");
 const { getInputs, Visibility } = require("./src/inputHandler.js");
 const { repoExists } = require("./src/githubApi.js");
 const { createRepo } = require("./src/repoCreator.js");
 const { fail } = require("./src/errorHandler.js");
-const Auth = require("./src/auth.js");
 
 function isAuthTypeCompatibleWithRepoTemplate(authType, repoTemplate) {
-  return !(authType == Auth.AuthType.APP && repoTemplate.org != "") && repoTemplate.repo != "";
+  return (
+    (!(authType == Auth.AuthType.APP && repoTemplate.org != "") && repoTemplate.repo != "") || repoTemplate.clonePush
+  );
 }
 
 async function main() {
@@ -30,11 +32,17 @@ async function main() {
     fail(`Cannot create a repo "${inputs.repoOrg}/${inputs.repoName}", repo already exists.`);
   }
 
-  await createRepo(octokit, inputs.repo, inputs.repoTemplate);
+  await createRepo(auth.octokit, auth.type, inputs.repo, inputs.repoTemplate);
   core.info("");
 }
 
 // Only run main if called directly
 if (require.main === module) {
   main().catch((error) => fail("Unhandled exception", error));
+}
+
+if (process.env["NODE_DEV"] == "TEST") {
+  module.exports = {
+    isAuthTypeCompatibleWithRepoTemplate,
+  };
 }

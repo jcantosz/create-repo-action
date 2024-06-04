@@ -30,6 +30,7 @@ function getInputs() {
       org: core.getInput("repo_template_org") || "",
       repo: core.getInput("repo_template_repo") || "",
       includeBranches: core.getInput("include_all_branches") || "",
+      clonePush: core.getInput("clone_push").toLower() === "true",
     },
   };
 }
