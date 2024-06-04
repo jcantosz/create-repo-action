@@ -4,9 +4,10 @@ const { Visibility } = require("./inputHandler.js");
 const { clonePushTemplate } = require("./gitShell.js");
 const { AuthType } = require("./auth.js");
 
-async function createRepo(octokit, autType, repo, repoTemplate) {
+async function createRepo(octokit, authType, githubUrl, repo, repoTemplate) {
   // if repo_template then create repo, make it private then switch visibility to what the user selected
-  if (!repoTemplate.clone_push && repoTemplate.org != "" && repoTemplate.repo != "") {
+  const hasRepoTemplate = repoTemplate.org != "" && repoTemplate.repo != "";
+  if (!repoTemplate.clone_push && hasRepoTemplate) {
     core.info(`Creating repo "${repo.org}/${repo.repo} from template ${repoTemplate.org}/${repoTemplate.repo}"`);
     await createRepoFromTemplate(
       octokit,
@@ -30,8 +31,6 @@ async function createRepo(octokit, autType, repo, repoTemplate) {
       // get octokit token
       const type = authType == AuthType.APP ? { type: "app" } : {};
       const token = (await octokit.auth(type)).token;
-      // get github url from env
-      const githubUrl = process.env("GITHUB_SERVER_URL");
 
       clonePushTemplate(
         token,

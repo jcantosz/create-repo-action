@@ -1,10 +1,11 @@
 const core = require("@actions/core");
 
-function fail(message, error) {
+function error(message, error) {
   // Your existing fail function code
   if (error) core.error(error);
   core.setFailed(message);
-  process.exit();
+
+  throw new Error(error || message);
 }
 
-module.exports = { fail };
+module.exports = { error };

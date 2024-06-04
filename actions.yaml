@@ -17,7 +17,7 @@ inputs:
   api_url:
     description: "GitHub API url. Change this if using GitHub Enterprise Server."
     required: false
-    default: https://api.github.com
+    default: "https://api.github.com"
 
   # Dest repo params
   org:
@@ -50,6 +50,10 @@ inputs:
     description: "Simulates 'create from a template' using GitHub App authentication by running git clone/push instead of using the API. Will retain all commit history. Will not show linkage in UI."
     required: false
     default: "false"
+  github_url:
+    description: "URL of github instance to clone from and push to. Set this if using GHES"
+    required: false
+    default: "https://github.com"
 runs:
   using: "node20"
   main: "dist/index.js"

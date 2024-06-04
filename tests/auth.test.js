@@ -1,9 +1,9 @@
 const { AuthType, createOctokitInstance } = require("../src/auth.js");
 
-const { fail } = require("../src/errorHandler.js");
+const { error } = require("../src/errorHandler.js");
 
 jest.mock("../src/errorHandler.js", () => ({
-  fail: jest.fn(),
+  error: jest.fn(),
 }));
 
 describe("Auth", () => {
@@ -30,19 +30,19 @@ describe("Auth", () => {
     expect(auth.type).toEqual(AuthType.APP);
   });
 
-  it("Should fail on incomplete App auth info", () => {
+  it("Should error on incomplete App auth info", () => {
     let auth = createOctokitInstance({ appId: "aaa", appPrivateKey: "", appInstallationId: "", PAT: "" });
-    expect(fail).toHaveBeenCalled();
+    expect(error).toHaveBeenCalled();
 
     auth = createOctokitInstance({ appId: "", appPrivateKey: "bbb", appInstallationId: "", PAT: "" });
-    expect(fail).toHaveBeenCalled();
+    expect(error).toHaveBeenCalled();
 
     auth = createOctokitInstance({ appId: "", appPrivateKey: "", appInstallationId: "ccc", PAT: "" });
-    expect(fail).toHaveBeenCalled();
+    expect(error).toHaveBeenCalled();
   });
 
-  it("Should fail if neither PAT nor App auth provided", () => {
+  it("Should error if neither PAT nor App auth provided", () => {
     const auth = createOctokitInstance({ appId: "", appPrivateKey: "", appInstallationId: "", pat: "" });
-    expect(fail).toHaveBeenCalled();
+    expect(error).toHaveBeenCalled();
   });
 });

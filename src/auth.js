@@ -3,7 +3,7 @@ const { paginateRest } = require("@octokit/plugin-paginate-rest");
 const { throttling } = require("@octokit/plugin-throttling");
 const { createAppAuth } = require("@octokit/auth-app");
 const core = require("@actions/core");
-const { fail } = require("./errorHandler.js");
+const { error } = require("./errorHandler.js");
 
 const MyOctokit = Octokit.plugin(throttling).plugin(paginateRest);
 
@@ -61,7 +61,7 @@ function createOctokitInstance(auth) {
   } else if (auth.PAT) {
     return { octokit: createPATOctokitInstance(auth), type: AuthType.PAT };
   } else {
-    fail(`Either a PAT or App authentication must be provided`);
+    error(`Either a PAT or App authentication must be provided`);
   }
 }
 

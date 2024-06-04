@@ -1,9 +1,9 @@
 const { getInputs, Visibility } = require("../src/inputHandler.js");
 
-const { fail } = require("../src/errorHandler.js");
+const { error } = require("../src/errorHandler.js");
 
 jest.mock("../src/errorHandler.js", () => ({
-  fail: jest.fn(),
+  error: jest.fn(),
 }));
 
 describe("getInputs", () => {
@@ -23,6 +23,7 @@ describe("getInputs", () => {
         appId: "1",
         appInstallationId: "22",
         appPrivateKey: "abc",
+        githubUrl: "https://github-server.com",
       },
       repo: {
         org: "testOrg",
@@ -43,6 +44,7 @@ describe("getInputs", () => {
     process.env.INPUT_APP_ID = expected.auth.appId;
     process.env.INPUT_APP_PRIVATE_KEY = expected.auth.appPrivateKey;
     process.env.INPUT_APP_INSTALLATION_ID = expected.auth.appInstallationId;
+    process.env.INPUT_GITHUB_URL = expected.auth.githubUrl;
 
     process.env.INPUT_ORG = expected.repo.org;
     process.env.INPUT_REPO = expected.repo.repo;
@@ -69,7 +71,7 @@ describe("getInputs", () => {
   it("should fail when visibility is not one of the allowed values", () => {
     process.env.INPUT_VISIBILITY = "pub";
     getInputs();
-    expect(fail).toHaveBeenCalled();
+    expect(error).toHaveBeenCalled();
   });
 
   // it("should throw an error if a required input is missing", () => {
