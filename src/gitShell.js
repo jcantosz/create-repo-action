@@ -16,12 +16,12 @@ function isValidPathValue(value) {
 }
 
 // handle git clone
-function gitClone(host, org, repo, includeAllBranches, workingDir, outputDir) {
+function gitClone(host, repo, includeAllBranches, workingDir, outputDir) {
   // if we want all branches, use --bare
   const cloneArg = includeAllBranches ? "--bare" : "";
-  const url = new URL(`${org}/${repo}.git`, host);
+  const url = new URL(`${repo.org}/${repo.repo}.git`, host);
 
-  core.info(`Cloning template repo (${repoTemplateOrg}/${repoTemplateRepo})`);
+  core.info(`Cloning template repo (${repo.org}/${repo.repo})`);
   // set the output directory to resolve difference between normal and --bare clone (${repoTemplateName} vs ${repoTemplateName}.git)
   execSync(`git clone ${cloneArg} --no-tags ${url.href} ${outputDir}`, {
     cwd: workingDir,
@@ -29,16 +29,16 @@ function gitClone(host, org, repo, includeAllBranches, workingDir, outputDir) {
 }
 
 // handle git push
-function gitPush(host, org, repo, workingDir) {
-  const url = new URL(`${org}/${repo}.git`, host);
+function gitPush(host, repo, workingDir) {
+  const url = new URL(`${repo.org}/${repo.repo}.git`, host);
 
-  core.info(`Push template repo to ${org}/${repo}`);
+  core.info(`Push template repo to ${repo.org}/${repo.repo}`);
   execSync(`git push --mirror ${url.href}`, {
     cwd: workingDir,
   });
 }
 
-function clonePush(token, url, org, repo, repoTemplateOrg, repoTemplateRepo, includeAllBranches) {
+function clonePush(token, url, sourceRepo, destRepo, includeAllBranches) {
   try {
     const tmpdir = fs.mkdtempSync(os.tmpdir());
     const clonedDir = os.path.join(tmpdir, `${repoTemplateRepo}`);
@@ -46,8 +46,8 @@ function clonePush(token, url, org, repo, repoTemplateOrg, repoTemplateRepo, inc
     const hostWithAuth = `${url.protocol}//x-access-token:${token}@${url.host}`;
 
     core.info(`Cloning template repo (${repoTemplateOrg}/${repoTemplateRepo})`);
-    gitClone(hostWithAuth, repoTemplateOrg, repoTemplateRepo, includeAllBranches, workingDir, clonedDir);
-    gitPush(hostWithAuth, org, repo, clonedDir);
+    gitClone(hostWithAuth, sourceRepo, includeAllBranches, workingDir, clonedDir);
+    gitPush(hostWithAuth, destRepo, clonedDir);
 
     fs.rmdirSync(tmpdir);
   } catch (error) {
@@ -68,7 +68,9 @@ function clonePushTemplate(token, githubUrl, org, repo, repoTemplateOrg, repoTem
   if (!isHttpUrl(url) || !validPaths) {
     error("Please enter a valid url and org/repo names");
   } else {
-    clonePush(token, url, org, repo, repoTemplateOrg, repoTemplateRepo, includeAllBranches);
+    const sourceRepo = { org: org, repo: repo };
+    const destRepo = { org: repoTemplateOrg, repo: repoTemplateRepo };
+    clonePush(token, url, sourceRepo, destRepo, includeAllBranches);
   }
 }
 
