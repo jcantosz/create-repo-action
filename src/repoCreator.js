@@ -7,9 +7,10 @@ const { AuthType } = require("./auth.js");
 async function createRepo(octokit, authType, githubUrl, repo, repoTemplate) {
   // if repo_template then create repo, make it private then switch visibility to what the user selected
   const hasRepoTemplate = repoTemplate.org != "" && repoTemplate.repo != "";
-  if (!repoTemplate.clonePush && hasRepoTemplate) {
+
+  if (repoTemplate.clonePush != true && hasRepoTemplate) {
     core.info(
-      `Creating repo "${repo.org}/${repo.repo} from template '${repoTemplate.org}/${repoTemplate.repo}" using API"`
+      `Creating repo "${repo.org}/${repo.repo} from template '${repoTemplate.org}/${repoTemplate.repo}" using API.`
     );
     await createRepoFromTemplate(
       octokit,
@@ -29,7 +30,7 @@ async function createRepo(octokit, authType, githubUrl, repo, repoTemplate) {
     core.info(`Creating repo "${repo.org}/${repo.repo}" as empty repo.`);
     await createOrgRepo(octokit, repo.org, repo.repo, repo.description, repo.visibility);
 
-    if (repoTemplate.clonePush) {
+    if (repoTemplate.clonePush == true) {
       core.info(
         `Pushing contents from template '${repoTemplate.org}/${repoTemplate.repo}" to repo "${repo.org}/${repo.repo}".`
       );

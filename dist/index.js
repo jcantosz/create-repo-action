@@ -23,12 +23,14 @@ async function main() {
 
   const auth = Auth.createOctokitInstance(inputs.auth);
 
+  // I guess you _can_ create a repo from a template using an App and the docs are not updated tp reflect this
   // API doesnt allow us to create repos from templates with an App. Fail early if this is the case
-  if (!isAuthTypeCompatibleWithRepoTemplate(auth.type, inputs.repoTemplate)) {
-    error(
-      `Cannot create a repo "${inputs.repo.org}/${inputs.repo.repo}" from template "${inputs.repoTemplate.repo}/${inputs.repoTemplate.org}" using a GitHub App. Please provide a personal access token or set clone_push to true.`
-    );
-  }
+  // if (!isAuthTypeCompatibleWithRepoTemplate(auth.type, inputs.repoTemplate)) {
+  //   error(
+  //     `Cannot create a repo "${inputs.repo.org}/${inputs.repo.repo}" from template "${inputs.repoTemplate.repo}/${inputs.repoTemplate.org}" using a GitHub App. Please provide a personal access token or set clone_push to true.`
+  //   );
+  // }
+
   // Both repo template org and repo must be set or unset
   if ((inputs.repoTemplate.org == "") ^ (inputs.repoTemplate.repo == "")) {
     error(`Must set both "repo_template_org" and "repo_template_repo" if creating a repository from a template`);
@@ -39256,9 +39258,10 @@ const { AuthType } = __nccwpck_require__(1489);
 async function createRepo(octokit, authType, githubUrl, repo, repoTemplate) {
   // if repo_template then create repo, make it private then switch visibility to what the user selected
   const hasRepoTemplate = repoTemplate.org != "" && repoTemplate.repo != "";
-  if (!repoTemplate.clone_push && hasRepoTemplate) {
+
+  if (repoTemplate.clonePush != true && hasRepoTemplate) {
     core.info(
-      `Creating repo "${repo.org}/${repo.repo} from template '${repoTemplate.org}/${repoTemplate.repo}" using API"`
+      `Creating repo "${repo.org}/${repo.repo} from template '${repoTemplate.org}/${repoTemplate.repo}" using API.`
     );
     await createRepoFromTemplate(
       octokit,
@@ -39278,7 +39281,7 @@ async function createRepo(octokit, authType, githubUrl, repo, repoTemplate) {
     core.info(`Creating repo "${repo.org}/${repo.repo}" as empty repo.`);
     await createOrgRepo(octokit, repo.org, repo.repo, repo.description, repo.visibility);
 
-    if (repoTemplate.clone_push) {
+    if (repoTemplate.clonePush == true) {
       core.info(
         `Pushing contents from template '${repoTemplate.org}/${repoTemplate.repo}" to repo "${repo.org}/${repo.repo}".`
       );
