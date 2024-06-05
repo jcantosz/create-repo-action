@@ -51,8 +51,8 @@ function clonePush(token, url, sourceRepo, destRepo, includeAllBranches) {
     gitPush(hostWithAuth, destRepo, clonedDir);
 
     fs.rmdirSync(tmpdir);
-  } catch (error) {
-    error(error);
+  } catch (err) {
+    error(err);
   }
 }
 
