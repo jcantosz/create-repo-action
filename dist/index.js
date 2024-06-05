@@ -6,9 +6,9 @@
 
 const Auth = __nccwpck_require__(1489);
 const core = __nccwpck_require__(6150);
-const { getInputs, Visibility } = __nccwpck_require__(8928);
-const { repoExists } = __nccwpck_require__(946);
+const { getInputs } = __nccwpck_require__(8928);
 const { createRepo } = __nccwpck_require__(6223);
+const { repoExists } = __nccwpck_require__(946);
 const { error } = __nccwpck_require__(5858);
 
 function isAuthTypeCompatibleWithRepoTemplate(authType, repoTemplate) {
@@ -44,7 +44,7 @@ async function main() {
 
 // Only run main if called directly
 if (require.main === require.cache[eval('__filename')]) {
-  main().catch((error) => error("Unhandled exception", error));
+  main().catch((err) => error("Unhandled exception", err));
 }
 
 if (process.env["NODE_DEV"] == "TEST") {
@@ -39023,12 +39023,12 @@ module.exports = {
 
 const core = __nccwpck_require__(6150);
 
-function error(message, error) {
+function error(message = "Unhandled exception", err = "") {
   // Your existing fail function code
-  if (error) core.error(error);
+  if (err) core.error(err);
   core.setFailed(message);
 
-  throw new Error(error || message);
+  throw new Error(err || message);
 }
 
 module.exports = { error };

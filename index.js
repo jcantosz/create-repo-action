@@ -1,8 +1,8 @@
 const Auth = require("./src/auth.js");
 const core = require("@actions/core");
-const { getInputs, Visibility } = require("./src/inputHandler.js");
-const { repoExists } = require("./src/githubApi.js");
+const { getInputs } = require("./src/inputHandler.js");
 const { createRepo } = require("./src/repoCreator.js");
+const { repoExists } = require("./src/githubApi.js");
 const { error } = require("./src/errorHandler.js");
 
 function isAuthTypeCompatibleWithRepoTemplate(authType, repoTemplate) {
@@ -38,7 +38,7 @@ async function main() {
 
 // Only run main if called directly
 if (require.main === module) {
-  main().catch((error) => error("Unhandled exception", error));
+  main().catch((err) => error("Unhandled exception", err));
 }
 
 if (process.env["NODE_DEV"] == "TEST") {
