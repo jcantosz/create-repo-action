@@ -4,7 +4,7 @@ const { Visibility } = require("./inputHandler.js");
 const { clonePushTemplate } = require("./gitShell.js");
 const { AuthType } = require("./auth.js");
 
-async function createRepo(octokit, authType, githubUrl, repo, repoTemplate) {
+async function createRepo(octokit, authType, auth, repo, repoTemplate) {
   // if repo_template then create repo, make it private then switch visibility to what the user selected
   const hasRepoTemplate = repoTemplate.org != "" && repoTemplate.repo != "";
 
@@ -35,12 +35,17 @@ async function createRepo(octokit, authType, githubUrl, repo, repoTemplate) {
         `Pushing contents from template '${repoTemplate.org}/${repoTemplate.repo}" to repo "${repo.org}/${repo.repo}".`
       );
       // get octokit token
-      const type = authType == AuthType.APP ? { type: "app" } : {};
-      const token = (await octokit.auth(type)).token;
+      let token = "";
+      if (authType == AuthType.APP) {
+        //https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-an-installation-access-token-for-a-github-app#generating-an-installation-access-token
+        token = (await octokit.request(`POST /app/installations/${auth.appInstallationId}/access_tokens`)).data.token;
+      } else {
+        token = (await octokit.auth()).token;
+      }
 
       clonePushTemplate(
         token,
-        githubUrl,
+        auth.githubUrl,
         repo.org,
         repo.repo,
         repoTemplate.org,
