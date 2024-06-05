@@ -12,7 +12,7 @@ function isValidPathValue(value) {
   // The repository name can only contain ASCII letters, digits, and the characters ., -, and _.
   // Organizations may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.
   // using the more permissive of the two
-  return value.match(/^[a-zA-Z_.-]+$/) != null;
+  return value.match(/^[a-zA-Z0-9_.-]+$/) != null;
 }
 
 // handle git clone
