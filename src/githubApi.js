@@ -2,8 +2,8 @@ const core = require("@actions/core");
 
 async function repoExists(octokit, org, repo) {
   return await octokit
-    .request("GET  /repos/{owner}/{repo}", {
-      org: org,
+    .request("GET /repos/{owner}/{repo}", {
+      owner: org,
       repo: repo,
       headers: {
         "X-GitHub-Api-Version": "2022-11-28",
