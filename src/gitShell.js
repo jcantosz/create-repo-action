@@ -76,8 +76,8 @@ function clonePushTemplate(token, githubUrl, org, repo, repoTemplateOrg, repoTem
   if (!isHttpUrl(url) || !validPaths) {
     error("Please enter a valid url and org/repo names");
   } else {
-    const sourceRepo = { org: org, repo: repo };
-    const destRepo = { org: repoTemplateOrg, repo: repoTemplateRepo };
+    const sourceRepo = { org: repoTemplateOrg, repo: repoTemplateRepo };
+    const destRepo = { org: org, repo: repo };
     clonePush(token, url, sourceRepo, destRepo, includeAllBranches);
   }
 }
