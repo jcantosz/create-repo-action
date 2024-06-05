@@ -40,7 +40,7 @@ async function main() {
     error(`Cannot create a repo "${inputs.repo.org}/${inputs.repo.repo}", repo already exists.`);
   }
 
-  await createRepo(auth.octokit, auth.type, auth.githubUrl, inputs.repo, inputs.repoTemplate);
+  await createRepo(auth.octokit, auth.type, inputs.auth.githubUrl, inputs.repo, inputs.repoTemplate);
   core.info("");
 }
 
