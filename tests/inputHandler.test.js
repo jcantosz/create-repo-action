@@ -34,7 +34,7 @@ describe("getInputs", () => {
       repoTemplate: {
         org: "templateOrg",
         repo: "tempalteRepo",
-        includeBranches: "true",
+        includeBranches: true,
         clonePush: false,
       },
     };

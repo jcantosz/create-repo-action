@@ -39230,8 +39230,8 @@ function getInputs() {
     repoTemplate: {
       org: core.getInput("repo_template_org") || "",
       repo: core.getInput("repo_template_repo") || "",
-      includeBranches: core.getInput("include_all_branches") || "",
-      clonePush: core.getInput("clone_push").toLowerCase() === "true",
+      includeBranches: core.getInput("include_all_branches").toLowerCase() == "true",
+      clonePush: core.getInput("clone_push").toLowerCase() == "true",
     },
   };
 }
@@ -39257,7 +39257,9 @@ async function createRepo(octokit, authType, githubUrl, repo, repoTemplate) {
   // if repo_template then create repo, make it private then switch visibility to what the user selected
   const hasRepoTemplate = repoTemplate.org != "" && repoTemplate.repo != "";
   if (!repoTemplate.clone_push && hasRepoTemplate) {
-    core.info(`Creating repo "${repo.org}/${repo.repo} from template ${repoTemplate.org}/${repoTemplate.repo}"`);
+    core.info(
+      `Creating repo "${repo.org}/${repo.repo} from template '${repoTemplate.org}/${repoTemplate.repo}" using API"`
+    );
     await createRepoFromTemplate(
       octokit,
       repo.org,
@@ -39277,6 +39279,9 @@ async function createRepo(octokit, authType, githubUrl, repo, repoTemplate) {
     await createOrgRepo(octokit, repo.org, repo.repo, repo.description, repo.visibility);
 
     if (repoTemplate.clone_push) {
+      core.info(
+        `Pushing contents from template '${repoTemplate.org}/${repoTemplate.repo}" to repo "${repo.org}/${repo.repo}".`
+      );
       // get octokit token
       const type = authType == AuthType.APP ? { type: "app" } : {};
       const token = (await octokit.auth(type)).token;

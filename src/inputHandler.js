@@ -30,8 +30,8 @@ function getInputs() {
     repoTemplate: {
       org: core.getInput("repo_template_org") || "",
       repo: core.getInput("repo_template_repo") || "",
-      includeBranches: core.getInput("include_all_branches") || "",
-      clonePush: core.getInput("clone_push").toLowerCase() === "true",
+      includeBranches: core.getInput("include_all_branches").toLowerCase() == "true",
+      clonePush: core.getInput("clone_push").toLowerCase() == "true",
     },
   };
 }
