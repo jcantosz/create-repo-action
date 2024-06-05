@@ -1,6 +1,7 @@
 const { createRepo } = require("../src/repoCreator.js");
 const { createOrgRepo, createRepoFromTemplate, updateRepoVisibility } = require("../src/githubApi.js");
 const { Visibility } = require("../src/inputHandler.js");
+const { AuthType } = require("../src/auth.js");
 jest.mock("../src/githubApi.js", () => ({
   createOrgRepo: jest.fn(),
   createRepoFromTemplate: jest.fn(),
@@ -27,10 +28,11 @@ describe("createRepo", () => {
       repoTemplate: {
         org: "testOrg",
         repo: "testRepo",
+        clone_push: false,
       },
     };
 
-    await createRepo(octokit, input.repo, input.repoTemplate);
+    await createRepo(octokit, AuthType.APP, "", input.repo, input.repoTemplate);
     expect(createOrgRepo).not.toHaveBeenCalled();
     expect(createRepoFromTemplate).toHaveBeenCalled();
     expect(updateRepoVisibility).not.toHaveBeenCalled();
@@ -47,10 +49,11 @@ describe("createRepo", () => {
       repoTemplate: {
         org: "testOrg",
         repo: "testRepo",
+        clone_push: false,
       },
     };
 
-    await createRepo(octokit, input.repo, input.repoTemplate);
+    await createRepo(octokit, AuthType.APP, "", input.repo, input.repoTemplate);
 
     expect(createOrgRepo).not.toHaveBeenCalled();
     expect(createRepoFromTemplate).toHaveBeenCalled();
@@ -68,10 +71,11 @@ describe("createRepo", () => {
       repoTemplate: {
         org: "testOrg",
         repo: "testRepo",
+        clone_push: false,
       },
     };
 
-    await createRepo(octokit, input.repo, input.repoTemplate);
+    await createRepo(octokit, AuthType.APP, "", input.repo, input.repoTemplate);
     expect(createOrgRepo).not.toHaveBeenCalled();
     expect(createRepoFromTemplate).toHaveBeenCalled();
     expect(updateRepoVisibility).toHaveBeenCalled();
@@ -88,10 +92,11 @@ describe("createRepo", () => {
       repoTemplate: {
         org: "",
         repo: "",
+        clone_push: false,
       },
     };
 
-    await createRepo(octokit, input.repo, input.repoTemplate);
+    await createRepo(octokit, AuthType.APP, "", input.repo, input.repoTemplate);
     expect(createOrgRepo).toHaveBeenCalled();
     expect(createRepoFromTemplate).not.toHaveBeenCalled();
     expect(updateRepoVisibility).not.toHaveBeenCalled();

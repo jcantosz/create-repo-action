@@ -1,8 +1,8 @@
 {
   "scripts": {
     "build": "ncc build index.js --license licenses.txt",
-    "test": "jest",
-    "coverage": "jest --coverage --coverageReporters=text"
+    "test": "NODE_DEV=TEST jest",
+    "coverage": "NODE_DEV=TEST jest --coverage --coverageReporters=text"
   },
   "dependencies": {
     "@actions/core": "^1.10.1",

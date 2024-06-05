@@ -1,10 +1,11 @@
 const core = require("@actions/core");
 
-function fail(message, error) {
+function error(message = "Unhandled exception", err = "") {
   // Your existing fail function code
-  if (error) core.error(error);
+  if (err) core.error(err);
   core.setFailed(message);
-  process.exit();
+
+  throw new Error(err || message);
 }
 
-module.exports = { fail };
+module.exports = { error };
