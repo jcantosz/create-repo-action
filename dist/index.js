@@ -26,16 +26,16 @@ async function main() {
   // API doesnt allow us to create repos from templates with an App. Fail early if this is the case
   if (!isAuthTypeCompatibleWithRepoTemplate(auth.type, inputs.repoTemplate)) {
     error(
-      `Cannot create a repo "${inputs.repoOrg}/${inputs.repoName}" from template "${inputs.repoTemplate}" using a GitHub App. Please provide a personal access token`
+      `Cannot create a repo "${inputs.repo.org}/${inputs.repo.repo}" from template "${inputs.repoTemplate.repo}/${inputs.repoTemplate.org}" using a GitHub App. Please provide a personal access token or set clone_push to true.`
     );
   }
   // Both repo template org and repo must be set or unset
-  if ((repoTemplate.org == "") ^ (repoTemplate.repo == "")) {
+  if ((inputs.repoTemplate.org == "") ^ (inputs.repoTemplate.repo == "")) {
     error(`Must set both "repo_template_org" and "repo_template_repo" if creating a repository from a template`);
   }
 
   if (await repoExists(auth.octokit, inputs.repo.org, inputs.repo.repo)) {
-    error(`Cannot create a repo "${inputs.repoOrg}/${inputs.repoName}", repo already exists.`);
+    error(`Cannot create a repo "${inputs.repo.org}/${inputs.repo.repo}", repo already exists.`);
   }
 
   await createRepo(auth.octokit, auth.type, auth.githubUrl, inputs.repo, inputs.repoTemplate);
