@@ -43,7 +43,7 @@ function clonePush(token, url, sourceRepo, destRepo, includeAllBranches) {
     const runnerTemp = process.env["RUNNER_TEMP"] || os.tmpdir();
     core.debug(`Runner temp set to ${runnerTemp}, OS temp: ${os.tmpdir()}`);
     const tmpdir = fs.mkdtempSync(runnerTemp);
-    const clonedDir = os.path.join(tmpdir, `${repoTemplateRepo}`);
+    const clonedDir = path.join(tmpdir, `${repoTemplateRepo}`);
     // Should we add the pathname back in? If they have a reverse proxy and do path based routing, maybe. For now, not worrying about it
     const hostWithAuth = `${url.protocol}//x-access-token:${token}@${url.host}`;
 
