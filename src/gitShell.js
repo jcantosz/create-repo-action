@@ -3,7 +3,7 @@ const os = require("os");
 const { execSync } = require("node:child_process");
 const core = require("@actions/core");
 const { error } = require("./errorHandler.js");
-
+const github = require("@actions/github");
 function isHttpUrl(url) {
   return url.protocol === "http:" || url.protocol === "https:";
 }
@@ -40,7 +40,7 @@ function gitPush(host, repo, workingDir) {
 
 function clonePush(token, url, sourceRepo, destRepo, includeAllBranches) {
   try {
-    const tmpdir = fs.mkdtempSync(os.tmpdir());
+    const tmpdir = fs.mkdtempSync(github.context.runner.temp || os.tmpdir());
     const clonedDir = os.path.join(tmpdir, `${repoTemplateRepo}`);
     // Should we add the pathname back in? If they have a reverse proxy and do path based routing, maybe. For now, not worrying about it
     const hostWithAuth = `${url.protocol}//x-access-token:${token}@${url.host}`;
