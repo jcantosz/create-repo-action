@@ -39044,6 +39044,7 @@ module.exports = { error };
 const fs = __nccwpck_require__(7147);
 const os = __nccwpck_require__(2037);
 const { execSync } = __nccwpck_require__(7718);
+const path = __nccwpck_require__(9411);
 const core = __nccwpck_require__(6150);
 const { error } = __nccwpck_require__(5858);
 
@@ -39423,6 +39424,14 @@ module.exports = require("node:child_process");
 
 "use strict";
 module.exports = require("node:events");
+
+/***/ }),
+
+/***/ 9411:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:path");
 
 /***/ }),
 

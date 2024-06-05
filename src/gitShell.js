@@ -1,6 +1,7 @@
 const fs = require("fs");
 const os = require("os");
 const { execSync } = require("node:child_process");
+const path = require("node:path");
 const core = require("@actions/core");
 const { error } = require("./errorHandler.js");
 
