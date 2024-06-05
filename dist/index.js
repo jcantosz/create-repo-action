@@ -39092,7 +39092,7 @@ function clonePush(token, url, sourceRepo, destRepo, includeAllBranches) {
     const hostWithAuth = `${url.protocol}//x-access-token:${token}@${url.host}`;
 
     core.info(`Cloning template repo`);
-    gitClone(hostWithAuth, sourceRepo, includeAllBranches, workingDir, clonedDir);
+    gitClone(hostWithAuth, sourceRepo, includeAllBranches, tmpdir, clonedDir);
     core.info(`Pushing to empty repo`);
     gitPush(hostWithAuth, destRepo, clonedDir);
 
