@@ -39096,7 +39096,7 @@ function clonePush(token, url, sourceRepo, destRepo, includeAllBranches) {
     core.info(`Pushing to empty repo`);
     gitPush(hostWithAuth, destRepo, clonedDir);
 
-    fs.rmdirSync(tmpdir, { recursive: true, force: true });
+    fs.rmSync(tmpdir, { recursive: true, force: true });
   } catch (err) {
     error(err);
   }
