@@ -38,7 +38,7 @@ async function main() {
 
 // Only run main if called directly
 if (require.main === module) {
-  main().catch((err) => error("Unhandled exception", err));
+  main();
 }
 
 if (process.env["NODE_DEV"] == "TEST") {
