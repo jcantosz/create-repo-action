@@ -5,25 +5,11 @@ const { createRepo } = require("./src/repoCreator.js");
 const { repoExists } = require("./src/githubApi.js");
 const { error } = require("./src/errorHandler.js");
 
-function isAuthTypeCompatibleWithRepoTemplate(authType, repoTemplate) {
-  const isAppAuth = authType == Auth.AuthType.APP;
-  const usingRepoTemplate = repoTemplate.org != "" && repoTemplate.repo != "";
-  return !(isAppAuth && usingRepoTemplate) || repoTemplate.clonePush;
-}
-
 async function main() {
   const inputs = getInputs();
   core.debug(`inputs: ${JSON.stringify(inputs)}`);
 
   const auth = Auth.createOctokitInstance(inputs.auth);
-
-  // I guess you _can_ create a repo from a template using an App and the docs are not updated tp reflect this
-  // API doesnt allow us to create repos from templates with an App. Fail early if this is the case
-  // if (!isAuthTypeCompatibleWithRepoTemplate(auth.type, inputs.repoTemplate)) {
-  //   error(
-  //     `Cannot create a repo "${inputs.repo.org}/${inputs.repo.repo}" from template "${inputs.repoTemplate.repo}/${inputs.repoTemplate.org}" using a GitHub App. Please provide a personal access token or set clone_push to true.`
-  //   );
-  // }
 
   // Both repo template org and repo must be set or unset
   if ((inputs.repoTemplate.org == "") ^ (inputs.repoTemplate.repo == "")) {

@@ -1,5 +1,5 @@
 name: "Create repo"
-description: "Creates repo either empty or from a template. Can authorize with a PAT or a GitHub App. GitHub Apps cannot create repos from a repo template. "
+description: "Creates repo either empty or from a template. Can authorize with a PAT or a GitHub App."
 inputs:
   # Auth params
   pat:
@@ -47,7 +47,7 @@ inputs:
     required: false
     default: "true"
   clone_push:
-    description: "Simulates 'create from a template' using GitHub App authentication by running git clone/push instead of using the API. Will retain all commit history. Will not show linkage in UI."
+    description: "Simulates 'create from a template' by running git clone/push instead of using the API. Will retain all commit history. Will not show linkage in UI."
     required: false
     default: "false"
   github_url:
